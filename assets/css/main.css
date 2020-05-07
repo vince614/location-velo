@@ -81,3 +81,52 @@ a {
     width: 20px;
     height: 20px;
 }
+
+/* Slider */
+
+.slider {
+    display: flex;
+    margin-top: 75px;
+    width: 100%;
+    height: 500px;
+    background-color: #70a1ff;
+}
+
+/* Map */
+
+.map {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    padding: 50px;
+    margin: 50px 0;
+}
+
+.mapHeader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px;
+}
+
+.two-colums {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.mapContainer {
+    display: flex;
+    flex: .5;
+    height: 50vh;
+    background-color: #57606f;
+    border-radius: 10px;
+}
+
+.bookingContainer {
+    height: 300px;
+    background-color: #57606f;
+    border-radius: 10px;
+    flex: .3;
+}
