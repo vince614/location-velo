@@ -94,8 +94,8 @@ a {
 }
 
 .dots-wrapper {
+    display: flex;
     position: absolute;
-    width: 100px;
     left: 50%;
     margin-left: -50px;
     top: 500px;
@@ -103,9 +103,9 @@ a {
 }
 
 .dots-wrapper li {
-    display: inline-block;
-    width: 12px;
-    height: 12px;
+    display: inline-flex;
+    width: 16px;
+    height: 16px;
     background-color: white;
     border-radius: 50%;
     margin: 0 4px;
@@ -116,6 +116,18 @@ a {
 
 .dots-wrapper li.active, .dots-wrapper li:hover {
     opacity: 1;
+}
+
+.dots-wrapper li.play-pause {
+    background-color: rgba(0, 0, 0, .7);
+    opacity: 1;
+    color: white;
+    border-radius: 10px;
+    height: 16px;
+    width: fit-content;
+    padding: 0 10px;
+    align-items: center;
+    justify-content: center;
 }
 
 .slider {
@@ -180,11 +192,9 @@ a {
     user-select: none;
     display: block;
     width: 100vw;
-    font-size: 10vw;
+    font-size: 5vw;
     line-height: 500px;
-    letter-spacing: 1vw;
-    font-family: Impact, Charcoal, sans-serif;
-    text-shadow: 5px 5px 0 #ffffff;
+    text-shadow: 5px 5px 0 #000;
 }
 
 a[class|="arrow"] {

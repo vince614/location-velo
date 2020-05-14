@@ -11,6 +11,7 @@ class App {
             },
             "mapContainer"
         );
+        this.slider = new Slider();
     }
 
     /**

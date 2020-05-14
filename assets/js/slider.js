@@ -19,6 +19,9 @@ class Slider {
 
         this.$extendObj(this.def, settings);
         this.init();
+
+        this.sliderPlayed = false;
+        this.toggleAnimateDots();
     }
 
     /**
@@ -85,10 +88,6 @@ class Slider {
      * Builds all dots
      */
     buildDots() {
-        /**
-         * Self instance
-         * @type {Slider}
-         */
         let self = this;
 
         for (let i = 0; i < self.totalSlides; i++) {
@@ -97,10 +96,20 @@ class Slider {
             self.def.dotsWrapper.appendChild(dot);
         }
 
+        self.dotplay = document.createElement('li');
+        self.dotplay.setAttribute('data-slide', 'play');
+        self.addClass(self.dotplay, 'play-pause');
+        self.dotplay.innerText = 'stop';
+        self.def.dotsWrapper.appendChild(self.dotplay);
+
         self.def.dotsWrapper.addEventListener('click', function (e) {
             if (e.target && e.target.nodeName === "LI") {
-                self.curSlide = e.target.getAttribute('data-slide');
-                self.gotoSlide();
+                if (e.target.getAttribute('data-slide') === 'play') {
+                    self.toggleAnimateDots();
+                }else {
+                    self.curSlide = e.target.getAttribute('data-slide');
+                    self.gotoSlide();
+                }
             }
         }, false);
     }
@@ -313,6 +322,31 @@ class Slider {
         }
     }
 
+    toggleAnimateDots() {
+        let self = this;
+
+        if (self.sliderPlayed) {
+            clearInterval(this.slideAnimation);
+            self.sliderPlayed = false;
+            self.dotplay.innerText = 'play';
+        }else {
+            this.slideAnimation = setInterval(() => {
+                if (!self.hasClass(self.def.target, 'isAnimating')) {
+                    if (self.curSlide === self.totalSlides) {
+                        self.curSlide = 0;
+                        self.sliderInner.style.left = -self.curSlide * self.slideW + 'px';
+                    }
+                    self.curSlide++;
+                    setTimeout(function () {
+                        self.gotoSlide();
+                    }, 20);
+                }
+            }, 3000);
+            self.sliderPlayed = true;
+            self.dotplay.innerText = 'stop';
+        }
+    }
+
     setDot() {
         let self = this;
 
@@ -348,5 +382,3 @@ class Slider {
         self.def.afterChangeSlide(self);
     }
 }
-
-let slider = new Slider();
