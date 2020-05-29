@@ -14,6 +14,7 @@ class Slider {
             },
             swipe: true,
             autoHeight: true,
+            animateSliderDuration: 5000,
             afterChangeSlide: function afterChangeSlide() {}
         };
 
@@ -341,7 +342,7 @@ class Slider {
                         self.gotoSlide();
                     }, 20);
                 }
-            }, 3000);
+            }, self.def.animateSliderDuration);
             self.sliderPlayed = true;
             self.dotplay.innerText = 'stop';
         }
