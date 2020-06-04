@@ -9,6 +9,7 @@ class GoogleMap {
         this.position = position;
         this.element = $("#" + selectorId)[0];
         this.icon = "assets/icons/map/green.png";
+        this.selectedStation = [];
     }
 
     /**
@@ -61,10 +62,27 @@ class GoogleMap {
         if (this.marker.availableBikes < 10) this.marker.icon = "assets/icons/map/orange.png";
         if (this.marker.availableBikes <= 0 || this.marker.status === "CLOSED") this.marker.icon = "assets/icons/map/red.png";
 
+        //Click on station
+        this.marker.addListener('click', () => {
+            this.showMarker(station);
+        })
     }
 
-    updateMarkers() {
+    /**
+     * Show marker infos
+     * @param station
+     */
+    showMarker(station) {
+        //Set marker in center & add selected station
+        this.map.panTo(station.position);
+        this.selectedStation = station;
 
+        //Change card infos
+        $('#stationName').text(station.name);
+        let stationStatus = $('#stationStatus');
+        station.status === "OPEN" ? stationStatus.text('Station ouverte') : stationStatus.text('Station fermé');
+        $('#stationAdresse').text(station.address);
+        $('#stationBikes').text(station.available_bikes + ' / ' + station.bike_stands);
+        $('#stationParking').text(station.available_bike_stands);
     }
-
 }

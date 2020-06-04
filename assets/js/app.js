@@ -6,8 +6,8 @@ class App {
     constructor() {
         this.googleMap = new GoogleMap(
             {
-                lat: 43.295334,
-                lng: 5.374407
+                lat: 45.7579502,
+                lng: 4.8001016
             },
             "mapContainer"
         );
