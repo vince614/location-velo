@@ -329,3 +329,42 @@ a[class|="arrow"] {
     border-radius: 5px;
     cursor: pointer;
 }
+
+#canvas {
+    background-color: #fdfbff;
+    border: 1px solid black;
+    box-shadow: 5px 5px 0 0 #80808040;
+    width: 300px;
+    height: 150px;
+    margin: 20px auto;
+    display: none;
+}
+
+.canvasButtonsContainer {
+    display: none;
+    justify-content: center;
+    width: 100%;
+    position: absolute;
+    bottom: 10px;
+}
+
+.canvasButton {
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    margin: 0 5px;
+    width: 120px;
+    transition: .1s ease-in-out;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.confirm {
+    background-color: #70a1ff;
+}
+
+.clear {
+    background-color: #f27474;
+}
