@@ -2,8 +2,10 @@
 <html lang="fr">
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Carte interactive de location de vélos</title>
     <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="assets/css/tooltips.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="node_modules/@sweetalert2/theme-borderless/borderless.css">
 </head>
@@ -66,18 +68,18 @@
                 <h2 id="stationName" class="regularText marginLeft">Veuillez selectionner une station</h2>
                 <span id="stationStatus" class="lightText marginLeft">Pas d'information</span>
             </div>
-            <div class="bookingInfos">
+            <div id="bookingInfos" class="bookingInfos">
                 <div class="bookingItem">
                     <img src="assets/icons/lieu.png" alt="lieu">
-                    <span id="stationAdresse" class="regularText"> - </span>
+                    <span tooltip="Adresse" id="stationAdresse" class="regularText"> - </span>
                 </div>
                 <div class="bookingItem">
                     <img src="assets/icons/bike.png" alt="vélo">
-                    <span id="stationBikes" class="regularText"> -  /  - </span>
+                    <span tooltip="Vélos disponibles" id="stationBikes" class="regularText"> -  /  - </span>
                 </div>
                 <div class="bookingItem">
                     <img src="assets/icons/parking.png" alt="parking">
-                    <span id="stationParking" class="regularText"> - </span>
+                    <span tooltip="Supports à vélos disponibles" id="stationParking" class="regularText"> - </span>
                 </div>
             </div>
             <div class="bookingValidation">
@@ -98,7 +100,33 @@
     </div>
 </div>
 
-<div id="booking" class="booking"></div>
+<div id="booking" class="booking">
+    <div class="bookingCard">
+        <div class="bookingHeader">
+            <h2 class="regularText marginLeft">Votre réservation</h2>
+            <span id="statusBooking" class="marginLeft red">Pas de réservation</span>
+        </div>
+        <div class="bookingInfos">
+            <p id="bookingDescription" class="lightText">Sélectionnez un vélo dans la station de votre choix puis confirmez votre réservation avec vos informations personnels (nom et prénom) ainsi que votre signature.
+                <br>Vous aurez alors 20 minutes pour le récupérer.</p>
+            <div class="bookingItem infos">
+                <img src="assets/icons/lieu.png" alt="lieu">
+                <span tooltip="Adresse de la station" id="reservedStationAdresse" class="regularText"></span>
+            </div>
+            <div class="bookingItem infos">
+                <img src="assets/icons/velib.png" alt="station">
+                <span tooltip="Nom de la station" id="reservedStationName" class="regularText"></span>
+            </div>
+            <div class="bookingItem infos">
+                <img src="assets/icons/horloge.png" alt="temps">
+                <span tooltip="Temps restant" id="timeLeft" class="regularText"></span>
+            </div>
+        </div>
+        <div id="cancelButton" class="bookingButton cancel">
+            Annuler
+        </div>
+    </div>
+</div>
 
 </body>
 <script src="assets/js/jquery-3.5.1.min.js"></script>

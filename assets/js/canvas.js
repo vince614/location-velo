@@ -91,7 +91,7 @@ class Canvas {
                     this.context.lineTo(this.newCursorX, this.newCursorY);
                     this.context.strokeStyle = "rgb(23, 145, 167)";
                     this.context.lineWidth = 4;
-                    this.context.closePath()
+                    this.context.closePath();
                     this.context.stroke();
                     this.sign = true;
                 }
@@ -113,28 +113,29 @@ class Canvas {
      * Confirm sign
      */
     confirm() {
-        let station = JSON.parse(sessionStorage.selectedStation);
+        let station = JSON.parse(sessionStorage.reservedStation);
         this.swalSuccess('Votre réservation à la station ' + station.name + ' à été effectué !');
         this.showElements();
-    }
-
-    /**
-     * Hide HTML elements
-     */
-    hideElements() {
-        $('.bookingInfos').hide();
-        $('.bookingValidation').hide();
-        $('.canvasButtonsContainer').css('display', 'flex');
+        this.app = new App(true).confirm();
     }
 
     /**
      * Show elements
      */
     showElements() {
-        $('.bookingInfos').show();
+        $('#bookingInfos').show();
         $('.bookingValidation').show();
         $('.canvasButtonsContainer').hide();
         this.canvas.hide();
+    }
+
+    /**
+     * Hide HTML elements
+     */
+    hideElements() {
+        $('#bookingInfos').hide();
+        $('.bookingValidation').hide();
+        $('.canvasButtonsContainer').css('display', 'flex');
     }
 
     /**

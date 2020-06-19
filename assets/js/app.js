@@ -3,7 +3,9 @@ class App {
     /**
      * Contructor
      */
-    constructor() {
+    constructor(safeMode = false) {
+        this.initSelectors();
+        if (safeMode) return;
         this.googleMap = new GoogleMap(
             {
                 lat: 45.7579502,
@@ -22,10 +24,38 @@ class App {
         //Init booking button
         $('.bookingButton').click(() => {
             if (this.googleMap.selectedStation.length !== 0) {
-                return this.openForm()
+                if (!sessionStorage.reservedStation) {
+                    return this.openForm();
+                }
+                return this.swalError('Vous avez déjà réservé une station !<br/><br/>Vous devez annuler votre ancienne réservation pour en faire une nouvelle.');
             }
             return this.swalError('Veuillez sélectionner une station !');
         });
+
+        // Check if existing reservedStation
+        if (sessionStorage.reservedStation) {
+            this.restoreReservedStation();
+        }
+    }
+
+    /**
+     * Init selectors
+     */
+    initSelectors() {
+        this.statusBooking = $('#statusBooking');
+        this.reservedStationAdresse = $('#reservedStationAdresse');
+        this.reservedStationName = $('#reservedStationName');
+        this.infos = $('.infos');
+        this.cancelButton = $('#cancelButton');
+        this.bookingDescription = $('#bookingDescription');
+        this.timeLeft = $('#timeLeft');
+    }
+
+    /**
+     * Restore station
+     */
+    restoreReservedStation() {
+        console.log("OK!");
     }
 
     /**
@@ -46,9 +76,11 @@ class App {
                 }
             }
         }).then((result) => {
-            sessionStorage.firstName = result.value.firstName;
-            sessionStorage.lastName = result.value.lastName;
-            sessionStorage.selectedStation = JSON.stringify(this.googleMap.selectedStation);
+            // Local storage
+            localStorage.firstName = result.value.firstName;
+            localStorage.lastName = result.value.lastName;
+            // Session storage
+            sessionStorage.reservedStation = JSON.stringify(this.googleMap.selectedStation);
             this.openCanvas();
         })
     }
@@ -61,6 +93,91 @@ class App {
     }
 
     /**
+     * Confirm canvas
+     */
+    confirm() {
+        let station = JSON.parse(sessionStorage.reservedStation);
+        this.showBooking(station);
+        this.reservedTime = Math.round(Date.now() / 1000);
+    }
+
+    /**
+     * Start countDown
+     */
+    startCountDown() {
+        let self = this;
+        setInterval(() => {
+            self.reservedTime--;
+            let minutes = self.component(self.reservedTime,60) % 60,
+                seconds = self.component(self.reservedTime,1) % 60,
+                time = 0;
+
+            //Time left
+            minutes >= 2 ? time = minutes + "min " + seconds + "s" : time = seconds + "s";
+            this.timeLeft.text(time);
+
+            //Reset reserved station when time epired
+            if (self.reservedTime <= 0) sessionStorage.reservedStation = [];
+        }, 1000);
+    }
+
+    /**
+     * Component
+     * @param x
+     * @param v
+     * @return {number}
+     */
+    component(x, v) {
+        return Math.floor(x / v);
+    }
+
+    /**
+     * Init cancel button
+     */
+    initCancelButton() {
+        let self = this;
+        this.cancelButton.click(() => {
+            if (sessionStorage.reservedStation) {
+                Swal.fire({
+                    title: 'Êtes vous sur ?',
+                    text: "Annuler votre réservation",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Oui, supprimé là!'
+                }).then((result) => {
+                    if (result.value) {
+                        //Remove item from sessionStorage
+                        sessionStorage.removeItem('reservedStation');
+                        Swal.fire(
+                            'Deleted!',
+                            'Votre réservation à été annuler.',
+                            'success'
+                        )
+                    }
+                })
+            }
+        });
+    }
+
+    /**
+     * Show booking
+     */
+    showBooking(station) {
+        this.statusBooking.removeClass('red');
+        this.statusBooking.addClass('green');
+        this.statusBooking.text('Réservation en cours');
+        this.reservedStationAdresse.text(station.address);
+        this.reservedStationName.text(station.name);
+        this.infos.css('display', 'flex');
+        this.cancelButton.css('display', 'flex');
+        this.bookingDescription.hide();
+        this.startCountDown();
+        this.initCancelButton();
+    }
+
+    /**
      * Swal error
      * @param msg
      */
@@ -68,7 +185,7 @@ class App {
         Swal.fire({
             icon: 'error',
             title: 'Erreur !',
-            text: msg
+            html: msg
         })
     }
 
