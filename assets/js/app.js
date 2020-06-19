@@ -21,9 +21,13 @@ class App {
      * Init
      */
     init() {
-        //Init booking button
+        // Init booking button
         $('.bookingButton').click(() => {
             if (this.googleMap.selectedStation.length !== 0) {
+
+                // If station no have available bikes
+                if (this.googleMap.selectedStation.available_bikes <= 0) return this.swalError("Cette station n'as plus de vélos libre, veuillez en choisir une autre.");
+
                 if (!sessionStorage.reservedStation) {
                     return this.openForm();
                 }
@@ -34,7 +38,8 @@ class App {
 
         // Check if existing reservedStation
         if (sessionStorage.reservedStation) {
-            this.restoreReservedStation();
+            let station = JSON.parse(sessionStorage.reservedStation);
+            this.showBooking(station);
         }
     }
 
@@ -49,13 +54,6 @@ class App {
         this.cancelButton = $('#cancelButton');
         this.bookingDescription = $('#bookingDescription');
         this.timeLeft = $('#timeLeft');
-    }
-
-    /**
-     * Restore station
-     */
-    restoreReservedStation() {
-        console.log("OK!");
     }
 
     /**
@@ -98,7 +96,7 @@ class App {
     confirm() {
         let station = JSON.parse(sessionStorage.reservedStation);
         this.showBooking(station);
-        this.reservedTime = Math.round(Date.now() / 1000);
+        sessionStorage.reservedTime = Math.round(Date.now() / 1000);
     }
 
     /**
@@ -107,9 +105,9 @@ class App {
     startCountDown() {
         let self = this;
         setInterval(() => {
-            self.reservedTime--;
-            let minutes = self.component(self.reservedTime,60) % 60,
-                seconds = self.component(self.reservedTime,1) % 60,
+            sessionStorage.reservedTime--;
+            let minutes = self.component(sessionStorage.reservedTime,60) % 60,
+                seconds = self.component(sessionStorage.reservedTime,1) % 60,
                 time = 0;
 
             //Time left
@@ -117,8 +115,18 @@ class App {
             this.timeLeft.text(time);
 
             //Reset reserved station when time epired
-            if (self.reservedTime <= 0) sessionStorage.reservedStation = [];
+            if (sessionStorage.reservedTime <= 0) {
+                self.clearSession();
+            }
         }, 1000);
+    }
+
+    /**
+     * Clear session
+     */
+    clearSession() {
+        sessionStorage.removeItem('reservedStation');
+        sessionStorage.removeItem('reservedTime');
     }
 
     /**
@@ -149,9 +157,10 @@ class App {
                 }).then((result) => {
                     if (result.value) {
                         //Remove item from sessionStorage
-                        sessionStorage.removeItem('reservedStation');
+                        self.clearSession();
+                        self.cancelBooking();
                         Swal.fire(
-                            'Deleted!',
+                            'Succès!',
                             'Votre réservation à été annuler.',
                             'success'
                         )
@@ -175,6 +184,18 @@ class App {
         this.bookingDescription.hide();
         this.startCountDown();
         this.initCancelButton();
+    }
+
+    /**
+     * Cancel booking
+     */
+    cancelBooking() {
+        this.statusBooking.removeClass('green');
+        this.statusBooking.addClass('red');
+        this.statusBooking.text('Pas de réservation');
+        this.bookingDescription.css('display', 'flex');
+        this.infos.hide();
+        this.cancelButton.hide();
     }
 
     /**
