@@ -16,6 +16,7 @@ a {
 
 .regularText {
     color: white;
+    text-align: center;
 }
 
 .coloredText {
@@ -97,7 +98,7 @@ a {
     display: flex;
     margin-top: 75px;
     width: 100%;
-    height: 500px;
+    height: 700px;
     background-color: #70a1ff;
 }
 
@@ -106,7 +107,7 @@ a {
     position: absolute;
     left: 50%;
     margin-left: -50px;
-    top: 500px;
+    top: 700px;
     text-align: center;
 }
 
@@ -160,25 +161,25 @@ a {
 .slider .slider-inner .slide {
     float: left;
     box-sizing: border-box;
-    background-size: 100% auto;
+    background-size: cover;
     background-attachment: fixed;
     background-position: center center;
 }
 
 .slide1 {
-    background-image: url("https://blogs-images.forbes.com/rosatrieu/files/2014/08/Valencia_market_-_lemons-1940x1454.jpg");
+    background-image: url("../img/first.webp");
 }
 
 .slide2 {
-    background-image: url("https://i.huffpost.com/gen/2930708/images/o-GMO-ORANGES-facebook.jpg");
+    background-image: url("../img/velib-2.jpg");
 }
 
 .slide3 {
-    background-image: url("https://blogs.kcrw.com/goodfood/wp-content/uploads/2013/05/watermelon.jpeg");
+    background-image: url("../img/tree.jpg");
 }
 
 .slide4 {
-    background-image: url("https://lghttp.32478.nexcesscdn.net/80E972/organiclifestylemagazine/wp-content/uploads/2013/09/Blueberries-.jpg");
+    background-image: url("../img/second.jpg");
 }
 
 .slide5 {
@@ -201,14 +202,14 @@ a {
     display: block;
     width: 100vw;
     font-size: 5vw;
-    line-height: 500px;
+    line-height: 700px;
     text-shadow: 5px 5px 0 #000;
 }
 
 a[class|="arrow"] {
     position: absolute;
     display: block;
-    top: 300px;
+    top: 400px;
     margin-top: -20px;
     width: 40px;
     height: 40px;
@@ -410,4 +411,26 @@ a[class|="arrow"] {
 
 #cancelButton {
     display: none;
+}
+
+/* Responsive */
+
+@media screen and (max-width: 1000px) {
+    .two-colums {
+        display: block;
+    }
+
+    .bookingContainer {
+        margin: 20px 0;
+    }
+
+    .bookingCard {
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .map {
+        padding: 0;
+    }
 }

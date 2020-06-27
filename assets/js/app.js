@@ -68,6 +68,7 @@ class App {
             preConfirm: () => {
                 let firstName = Swal.getPopup().querySelector('#firstName').value;
                 let lastName = Swal.getPopup().querySelector('#lastName').value;
+                if (!this.validation(firstName) || !this.validation(lastName)) Swal.showValidationMessage('Veuillez utilisez uniquement des lettres');
                 if (firstName === '' || lastName === '') Swal.showValidationMessage(`Veuillez renseigner votre nom et votre prénom`);
                 return {
                     firstName: firstName, lastName: lastName
@@ -84,6 +85,15 @@ class App {
     }
 
     /**
+     * Form validation
+     * @param str
+     * @return {boolean}
+     */
+    validation(str) {
+        return /^[a-zA-Z]+$/.test(str);
+    }
+
+    /**
      * Open canvas
      */
     openCanvas() {
@@ -96,7 +106,7 @@ class App {
     confirm() {
         let station = JSON.parse(sessionStorage.reservedStation);
         this.showBooking(station);
-        sessionStorage.reservedTime = Math.round(Date.now() / 1000);
+        sessionStorage.reservedTime = 30000;
     }
 
     /**
@@ -159,11 +169,7 @@ class App {
                         //Remove item from sessionStorage
                         self.clearSession();
                         self.cancelBooking();
-                        Swal.fire(
-                            'Succès!',
-                            'Votre réservation à été annuler.',
-                            'success'
-                        )
+                        self.swalSuccess('Votre réservation à été annuler.');
                     }
                 })
             }
