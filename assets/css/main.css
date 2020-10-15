@@ -427,6 +427,10 @@ a[class|="arrow"] {
     .bookingCard {
         width: 100%;
     }
+
+    .navBarLink span {
+        display: none;
+    }
 }
 
 @media screen and (max-width: 500px) {
